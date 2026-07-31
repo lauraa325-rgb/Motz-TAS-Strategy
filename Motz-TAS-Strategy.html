@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talent Acquisition Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#132A40;
+    --navy-deep:#0C1D2E;
+    --steel:#4C7A9C;
+    --brass:#C08A3E;
+    --paper:#F4F1E9;
+    --ink:#20241F;
+    --line: rgba(19,42,64,0.18);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'IBM Plex Sans', sans-serif;
+    background:var(--navy-deep);
+    color:var(--paper);
+    overflow:hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .deck{
+    position:relative;
+    width:100vw;
+    height:100vh;
+  }
+  .slide{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding: 6vh 8vw;
+    opacity:0;
+    transform: translateX(40px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events:none;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0/48px 48px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/48px 48px,
+      var(--navy);
+  }
+  .slide.active{
+    opacity:1;
+    transform:translateX(0);
+    pointer-events:auto;
+  }
+  .slide.prev{
+    transform: translateX(-40px);
+  }
+  .sheet-marks{
+    position:absolute;
+    top:28px; left:28px; right:28px; bottom:28px;
+    border:1px solid rgba(244,241,233,0.25);
+    pointer-events:none;
+  }
+  .sheet-marks::before, .sheet-marks::after,
+  .corner-tl, .corner-br{
+    content:'';
+  }
+  .corner{
+    position:absolute;
+    width:14px; height:14px;
+    border-color: var(--brass);
+  }
+  .corner.tl{ top:-1px; left:-1px; border-top:2px solid var(--brass); border-left:2px solid var(--brass);}
+  .corner.tr{ top:-1px; right:-1px; border-top:2px solid var(--brass); border-right:2px solid var(--brass);}
+  .corner.bl{ bottom:-1px; left:-1px; border-bottom:2px solid var(--brass); border-left:2px solid var(--brass);}
+  .corner.br{ bottom:-1px; right:-1px; border-bottom:2px solid var(--brass); border-right:2px solid var(--brass);}
+
+  .sheet-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--brass);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin-bottom: 18px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    line-height: 1.05;
+    color: var(--paper);
+    max-width: 14ch;
+  }
+  h1 em{
+    font-style: italic;
+    color: var(--brass);
+  }
+  .subtitle{
+    margin-top: 20px;
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    color: rgba(244,241,233,0.72);
+    max-width: 46ch;
+    line-height:1.5;
+  }
+  .byline{
+    margin-top: 48px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--steel);
+    letter-spacing: 0.04em;
+  }
+  .principles{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 36px;
+    max-width: 900px;
+  }
+  .principle{
+    border-left: 2px solid var(--brass);
+    padding-left: 20px;
+  }
+  .principle h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size: 1.4rem;
+    color: var(--paper);
+    margin-bottom: 10px;
+  }
+  .principle p{
+    color: rgba(244,241,233,0.68);
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+  .list-block{
+    margin-top: 32px;
+    display:flex;
+    flex-direction:column;
+    gap: 22px;
+    max-width: 720px;
+  }
+  .list-item{
+    display:flex;
+    gap: 18px;
+    align-items:flex-start;
+  }
+  .list-item .num{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--brass);
+    font-size: 0.9rem;
+    padding-top: 4px;
+    flex-shrink:0;
+    width: 28px;
+  }
+  .list-item h4{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size: 1.15rem;
+    color: var(--paper);
+    margin-bottom:4px;
+  }
+  .list-item p{
+    color: rgba(244,241,233,0.68);
+    font-size: 0.95rem;
+    line-height:1.5;
+    max-width: 56ch;
+  }
+  .closing-line{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    color: var(--paper);
+    max-width: 22ch;
+    line-height: 1.4;
+    margin-top: 20px;
+  }
+  .progress{
+    position:absolute;
+    bottom: 40px;
+    left: 8vw;
+    display:flex;
+    gap: 8px;
+    z-index: 5;
+  }
+  .dot{
+    width: 26px;
+    height: 3px;
+    background: rgba(244,241,233,0.25);
+    transition: background 0.3s ease;
+  }
+  .dot.active{ background: var(--brass); }
+
+  .nav-zone{
+    position:absolute;
+    top:0; bottom:0;
+    width: 18%;
+    z-index: 10;
+    cursor: pointer;
+  }
+  .nav-zone.left{ left:0; }
+  .nav-zone.right{ right:0; }
+
+  .hint{
+    position:absolute;
+    bottom: 40px;
+    right: 8vw;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(244,241,233,0.4);
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- Slide 1 -->
+  <div class="slide active" data-index="0">
+    <div class="sheet-marks">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+    </div>
+    <div class="sheet-label">Sheet 01 / 05 — Overview</div>
+    <div class="eyebrow">Motz Engineering · Talent Acquisition</div>
+    <h1>Recruiting built on <em>relationships</em>, not requisitions.</h1>
+    <p class="subtitle">A working framework for how we find, engage, and keep the technical talent this company depends on.</p>
+    <div class="byline">Laura Bates — Commissioning Staff Recruiter &amp; Cx Engineer</div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide" data-index="1">
+    <div class="sheet-marks">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+    </div>
+    <div class="sheet-label">Sheet 02 / 05 — Philosophy</div>
+    <div class="eyebrow">Two governing principles</div>
+    <h1 style="font-size:clamp(1.8rem,3.4vw,2.6rem); max-width:20ch;">The foundation everything else is built on.</h1>
+    <div class="principles">
+      <div class="principle">
+        <h3>Transformational, Not Transactional</h3>
+        <p>We build relationships with strong candidates before we need them, so we are not scrambling when a project ramps up.</p>
+      </div>
+      <div class="principle">
+        <h3>Relational Equity</h3>
+        <p>Trust earned early pays off later. Every conversation is an investment, whether or not a role is open today.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide" data-index="2">
+    <div class="sheet-marks">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+    </div>
+    <div class="sheet-label">Sheet 03 / 05 — Method</div>
+    <div class="eyebrow">How we engage the market</div>
+    <h1 style="font-size:clamp(1.8rem,3.4vw,2.6rem); max-width:20ch;">Attract, don't chase.</h1>
+    <div class="list-block">
+      <div class="list-item">
+        <span class="num">01</span>
+        <div><h4>Precise, not oversold</h4><p>We represent the role and the company accurately, so the candidates who say yes are the right fit.</p></div>
+      </div>
+      <div class="list-item">
+        <span class="num">02</span>
+        <div><h4>Curious about motivation</h4><p>Understanding what actually moves a candidate matters more than a fast close.</p></div>
+      </div>
+      <div class="list-item">
+        <span class="num">03</span>
+        <div><h4>Underserved talent, well served</h4><p>We reach strong candidates who are overlooked by standard postings and generic outreach.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="slide" data-index="3">
+    <div class="sheet-marks">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+    </div>
+    <div class="sheet-label">Sheet 04 / 05 — Execution</div>
+    <div class="eyebrow">First 90 days</div>
+    <h1 style="font-size:clamp(1.8rem,3.4vw,2.6rem); max-width:20ch;">Building the system, not just filling seats.</h1>
+    <div class="list-block">
+      <div class="list-item">
+        <span class="num">01</span>
+        <div><h4>Map the pipeline</h4><p>Identify where our current gaps sit against project demand.</p></div>
+      </div>
+      <div class="list-item">
+        <span class="num">02</span>
+        <div><h4>Build sourcing channels</h4><p>Align outreach to the project types that drive the most hiring urgency.</p></div>
+      </div>
+      <div class="list-item">
+        <span class="num">03</span>
+        <div><h4>Document the process</h4><p>Establish SOPs and tracking so the system holds even as scope evolves.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5 -->
+  <div class="slide" data-index="4">
+    <div class="sheet-marks">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+    </div>
+    <div class="sheet-label">Sheet 05 / 05 — Next Step</div>
+    <div class="eyebrow">Where we go from here</div>
+    <h1 style="max-width:16ch;">I'd welcome the chance to go deeper.</h1>
+    <p class="closing-line">Fifteen minutes, once I'm settled in, and I'll walk you through the full strategy.</p>
+  </div>
+
+  <div class="progress" id="progress"></div>
+  <div class="hint">Tap sides or swipe to navigate</div>
+  <div class="nav-zone left" onclick="go(-1)"></div>
+  <div class="nav-zone right" onclick="go(1)"></div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    progress.appendChild(dot);
+  });
+  const dots = document.querySelectorAll('.dot');
+
+  function render(){
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if(i === current) s.classList.add('active');
+      if(i < current) s.classList.add('prev');
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  function go(dir){
+    const next = current + dir;
+    if(next < 0 || next >= slides.length) return;
+    current = next;
+    render();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight') go(1);
+    if(e.key === 'ArrowLeft') go(-1);
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX);
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+  });
+</script>
+
+</body>
+</html>
