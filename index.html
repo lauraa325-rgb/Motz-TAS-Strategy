@@ -41,6 +41,8 @@
     transform: translateX(40px);
     transition: opacity 0.5s ease, transform 0.5s ease;
     pointer-events:none;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
     background:
       linear-gradient(var(--line) 1px, transparent 1px) 0 0/48px 48px,
       linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/48px 48px,
@@ -218,6 +220,45 @@
     color: rgba(244,241,233,0.4);
     text-transform: uppercase;
   }
+@media (max-height: 500px){
+    .slide{
+          justify-content:flex-start;
+          padding: 4vh 6vw 8vh;
+    }
+    h1{
+          font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+    }
+    .subtitle{
+          margin-top: 10px;
+          font-size: clamp(0.85rem, 2vw, 1rem);
+    }
+    .byline{
+          margin-top: 18px;
+    }
+    .principles{
+          grid-template-columns: 1fr;
+          gap: 14px;
+          margin-top: 16px;
+    }
+    .list-block{
+          margin-top: 12px;
+    }
+    .closing-line{
+          font-size: clamp(1rem, 3vw, 1.3rem);
+          margin-top: 12px;
+    }
+    .sheet-label{
+          margin-bottom: 12px;
+    }
+    .eyebrow{
+          margin-bottom: 8px;
+    }
+}
+@media (orientation: landscape) and (max-width: 950px){
+    .slide{
+          padding: 4vh 6vw 8vh;
+    }
+}
 </style>
 </head>
 <body>
